@@ -36,7 +36,10 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.6.2'
     compile 'com.google.android.gms:play-services-auth:11.6.2'
     ////
-
+    compile 'android.arch.lifecycle:extensions:1.0.0' //For LiveData, and ViewModel
+    compile 'android.arch.core:core-testing:1.0.0'//For controlling LiveData background threads in your tests
+    compile 'android.arch.lifecycle:reactivestreams:1.0.0' //LiveData with ReactiveStreams API
+    ////
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'

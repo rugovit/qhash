@@ -5,7 +5,7 @@
 
         <variable
             name="user"
-            type="com.rugovit.qhash.UserPOJO"/>
+            type="com.rugovit.qhash.UserViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

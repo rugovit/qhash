@@ -1,12 +1,12 @@
 package com.rugovit.qhash;
 
 /**
- * Created by rugovit on 11/28/2017.
+ * Created by rugovit on 12/4/2017.
  */
 
-public class UserPOJO {
+public class User {
     private String displayName;
-///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
     public String getDisplayName() {
         return displayName;
     }
