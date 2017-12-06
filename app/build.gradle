@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -40,6 +44,11 @@ dependencies {
     compile 'android.arch.core:core-testing:1.0.0'//For controlling LiveData background threads in your tests
     compile 'android.arch.lifecycle:reactivestreams:1.0.0' //LiveData with ReactiveStreams API
     ////
+    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.7'
+    // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
+    compile group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.0.1'
+    ////////
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'

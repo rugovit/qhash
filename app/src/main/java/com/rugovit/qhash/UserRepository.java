@@ -9,6 +9,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.rugovit.qhash.base_classes.data.Resource;
+import com.rugovit.qhash.login.User;
+
+import java.util.concurrent.Executor;
+
+import io.reactivex.Observable;
+
 
 /**
  * Created by rugovit on 11/28/2017.
@@ -42,37 +49,37 @@ public class UserRepository {
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public LiveData<User> getUser(String userId) {
-        final MutableLiveData<User> data = new MutableLiveData<>();
 
-        gitHubService.getProjectList(userId).enqueue(new Callback<List<Project>>() {
-            @Override
-            public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
-                data.setValue(response.body());
-            }
+    public Observable<Resource<User>> getUser(){
 
-            // Error handling will be explained in the next article …
+        Observable<Resource<User>> userObservable = Observable.create(emitter -> {
+
+             if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+                 User user = getUserConverter(FirebaseAuth.getInstance().getCurrentUser());
+                 Resource<User> resource= Resource.success(user);
+                 emitter.onNext(resource);
+                 emitter.onComplete();
+             }
+
+             FirebaseAuth.getInstance().signInAnonymously()
+                     .addOnCompleteListener((Executor) this, task -> {
+                         if (task.isSuccessful()) {
+                             // Sign in success, update UI with the signed-in user's information
+                             User user = getUserConverter(FirebaseAuth.getInstance().getCurrentUser());
+                             Resource<User> resource= Resource.success(user);
+                             emitter.onNext(resource);
+                             emitter.onComplete();
+                         } else {
+                             // If sign in fails, display a message to the user.
+                             Resource<User> resource= Resource.error(task.getException().getMessage(),null);
+                             emitter.onNext(resource);
+                             emitter.onComplete();
+                         }
+                     });
+
+
         });
-
-        return data;
-    }
-    public void signIn(){
-
-        FirebaseAuth.getInstance().signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            firebaseUser=user;
-                            onLoginFirabaseSucces(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            onLoginFirabaseFaild(task);
-                        }
-                    }
-                });
+        return userObservable;
     }
 
 
