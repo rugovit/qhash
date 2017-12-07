@@ -62,7 +62,7 @@ public class UserRepository {
              }
 
              FirebaseAuth.getInstance().signInAnonymously()
-                     .addOnCompleteListener((Executor) this, task -> {
+                     .addOnCompleteListener(task -> {
                          if (task.isSuccessful()) {
                              // Sign in success, update UI with the signed-in user's information
                              User user = getUserConverter(FirebaseAuth.getInstance().getCurrentUser());

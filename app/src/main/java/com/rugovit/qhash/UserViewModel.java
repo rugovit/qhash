@@ -28,7 +28,7 @@ public class UserViewModel extends BaseViewModel {
     public UserViewModel() {
          UserRepository.getInstance().getUser()//TODO replace UserRepository.getInstance() with dependency injection in the future
                  .observeOn(Schedulers.io())
-                 .subscribeOn(Schedulers.io())
+                 .subscribeOn(AndroidSchedulers.mainThread())
                  .subscribe(userResource -> {
              if (userResource.getStatus() == SUCESS) {
                  user.set(userResource.getData());

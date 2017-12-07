@@ -10,6 +10,7 @@ public class LauncherActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_launcher);
+        binding.setUser(new UserViewModel());
     }
 
 }
