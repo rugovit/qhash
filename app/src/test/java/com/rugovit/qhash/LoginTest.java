@@ -1,14 +1,12 @@
 package com.rugovit.qhash;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.rugovit.qhash.base_classes.data.Resource;
 import com.rugovit.qhash.login.User;
 
 import org.junit.Test;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.schedulers.TestScheduler;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -31,8 +29,9 @@ public class LoginTest {
             emitter.onNext(resource);
             emitter.onComplete();
         });
-        when(repository.getUser()).thenReturn(userObservable);
-        UserViewModel userViewModel=new UserViewModel(repository);
+        TestScheduler scheduler = new TestScheduler();
+        when(repository.getUserObserver()).thenReturn(userObservable);
+        UserViewModel userViewModel=new UserViewModel(repository,scheduler);
         assertEquals(userName, userViewModel.user.get().getDisplayName());
     }
 }

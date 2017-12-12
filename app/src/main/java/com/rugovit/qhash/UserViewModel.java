@@ -1,14 +1,13 @@
 package com.rugovit.qhash;
 
-import android.arch.lifecycle.Observer;
 import android.databinding.ObservableField;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.rugovit.qhash.base_classes.data.Resource;
 import com.rugovit.qhash.login.User;
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -22,20 +21,39 @@ import static com.rugovit.qhash.base_classes.data.ResourceStatus.SUCESS;
 public class UserViewModel extends BaseViewModel {
 
     public static final String TAG = "UserViewModel";
+    //////////////////////////////////////////////////////
     public final ObservableField<User> user = new ObservableField<>();
-///////////////////////////////////////////////////
-
-    public UserViewModel(UserRepository userRepository) {
-        userRepository.getUser()//TODO replace UserRepository.getInstance() with dependency injection in the future
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(userResource -> {
-                    if (userResource.getStatus() == SUCESS) {
-                        user.set(userResource.getData());
-                    } else if (userResource.getStatus() == ERROR) {
-                        Log.e(TAG, userResource.getMessage());
-                    }
-                });
+    /////////////////////////////////////////////////////
+    private Observable<Resource<User>>  observable;
+    public UserViewModel(UserRepository userRepository, Scheduler scheduler) {
+        observable = userRepository.getUserObserver();
+        observable.observeOn(scheduler)
+                    .subscribeOn(scheduler);
+        setObservable();
 
     }
+    public UserViewModel(UserRepository userRepository) {
+        observable=userRepository.getUserObserver();
+        observable.observeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread());
+        setObservable();
+
+    }
+
+    private void setObservable(){
+        observable.subscribe(userResource -> {
+                    if (userResource.getStatus() == SUCESS) {
+                        setUser(userResource);
+                    } else if (userResource.getStatus() == ERROR) {
+                        onError(userResource);
+                    }
+                });
+    }
+    private void setUser(Resource<User> userResource){
+        user.set(userResource.getData());
+    }
+    private void onError(Resource<User> userResource){
+        Log.e(TAG, userResource.getMessage());
+    }
+
 }

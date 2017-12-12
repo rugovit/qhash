@@ -50,7 +50,7 @@ public class UserRepository {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    public Observable<Resource<User>> getUser(){
+    public Observable<Resource<User>> getUserObserver(){
 
         Observable<Resource<User>> userObservable = Observable.create(emitter -> {
 
