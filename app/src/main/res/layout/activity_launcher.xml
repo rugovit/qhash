@@ -4,7 +4,7 @@
     <data>
         <variable
             name="user"
-            type="com.rugovit.qhash.login.UserViewModel"/>
+            type="com.rugovit.qhash.workflow.login.UserViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
