@@ -1,4 +1,4 @@
-package com.rugovit.qhash.login;
+package com.rugovit.qhash.workflow.login;
 
 /**
  * Created by rugovit on 12/4/2017.

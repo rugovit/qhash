@@ -4,13 +4,13 @@
     <data>
         <variable
             name="user"
-            type="com.rugovit.qhash.UserViewModel"/>
+            type="com.rugovit.qhash.login.UserViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context="com.rugovit.qhash.LauncherActivity"
+        tools:context=".workflow.login.LauncherActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
   >

@@ -1,4 +1,4 @@
-package com.rugovit.qhash;
+package com.rugovit.qhash.base_classes.view;
 
 
 import android.os.Bundle;

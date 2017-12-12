@@ -1,10 +1,10 @@
-package com.rugovit.qhash;
+package com.rugovit.qhash.workflow.login;
 
 import android.databinding.ObservableField;
 import android.util.Log;
 
+import com.rugovit.qhash.base_classes.view_model.BaseViewModel;
 import com.rugovit.qhash.base_classes.data.Resource;
-import com.rugovit.qhash.login.User;
 
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
@@ -30,16 +30,13 @@ public class UserViewModel extends BaseViewModel {
         observable.observeOn(scheduler)
                     .subscribeOn(scheduler);
         setObservable();
-
     }
     public UserViewModel(UserRepository userRepository) {
         observable=userRepository.getUserObserver();
         observable.observeOn(Schedulers.io())
                     .subscribeOn(AndroidSchedulers.mainThread());
         setObservable();
-
     }
-
     private void setObservable(){
         observable.subscribe(userResource -> {
                     if (userResource.getStatus() == SUCESS) {

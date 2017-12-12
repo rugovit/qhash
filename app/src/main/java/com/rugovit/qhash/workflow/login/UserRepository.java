@@ -1,18 +1,9 @@
-package com.rugovit.qhash;
+package com.rugovit.qhash.workflow.login;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.rugovit.qhash.base_classes.data.Resource;
-import com.rugovit.qhash.login.User;
-
-import java.util.concurrent.Executor;
+import com.rugovit.qhash.base_classes.model.BaseRepository;
 
 import io.reactivex.Observable;
 
@@ -21,7 +12,7 @@ import io.reactivex.Observable;
  * Created by rugovit on 11/28/2017.
  */
 
-public class UserRepository {
+public class UserRepository extends BaseRepository {
 
     private volatile static UserRepository INSTANCE = null;
     /**

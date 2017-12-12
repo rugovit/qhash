@@ -1,7 +1,9 @@
 package com.rugovit.qhash;
 
 import com.rugovit.qhash.base_classes.data.Resource;
-import com.rugovit.qhash.login.User;
+import com.rugovit.qhash.workflow.login.User;
+import com.rugovit.qhash.workflow.login.UserRepository;
+import com.rugovit.qhash.workflow.login.UserViewModel;
 
 import org.junit.Test;
 
