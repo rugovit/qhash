@@ -27,11 +27,13 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-database:11.6.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    //////GRAFOVI
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    ///////
     //////FIREBASE
     compile 'com.google.firebase:firebase-core:11.6.2'
     compile 'com.google.firebase:firebase-crash:11.6.2'
@@ -56,10 +58,8 @@ dependencies {
     compile group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.0.1'
     //////
     ////////TESTS
-    // Required -- JUnit 4 framework
-    testCompile 'junit:junit:4.12'
-    // Optional -- Mockito framework
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'junit:junit:4.12'  // Required -- JUnit 4 framework
+    testCompile 'org.mockito:mockito-core:1.10.19'  // Optional -- Mockito framework
     //////
 }
 
