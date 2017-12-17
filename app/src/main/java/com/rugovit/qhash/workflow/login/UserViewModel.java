@@ -1,6 +1,7 @@
 package com.rugovit.qhash.workflow.login;
 
 import android.databinding.ObservableField;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.rugovit.qhash.base_classes.view_model.BaseViewModel;
@@ -25,13 +26,13 @@ public class UserViewModel extends BaseViewModel {
     public final ObservableField<User> user = new ObservableField<>();
     /////////////////////////////////////////////////////
     private Observable<Resource<User>>  observable;
-    public UserViewModel(UserRepository userRepository, Scheduler scheduler) {
+    public UserViewModel(@NonNull UserRepository userRepository,@NonNull Scheduler scheduler) {
         observable = userRepository.getUserObserver();
         observable.observeOn(scheduler)
                     .subscribeOn(scheduler);
         setObservable();
     }
-    public UserViewModel(UserRepository userRepository) {
+    public UserViewModel(@NonNull UserRepository userRepository) {
         observable=userRepository.getUserObserver();
         observable.observeOn(Schedulers.io())
                     .subscribeOn(AndroidSchedulers.mainThread());
@@ -46,11 +47,12 @@ public class UserViewModel extends BaseViewModel {
                     }
                 });
     }
-    private void setUser(Resource<User> userResource){
+    private void setUser(@NonNull Resource<User> userResource){
         user.set(userResource.getData());
     }
-    private void onError(Resource<User> userResource){
-        Log.e(TAG, userResource.getMessage());
+    protected <T> void onError(@NonNull Resource<T> resorces) {
+        super.onError(resorces);
+        Log.e(TAG, resorces.getMessage());
     }
 
 }
