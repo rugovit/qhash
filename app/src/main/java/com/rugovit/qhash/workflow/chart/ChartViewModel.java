@@ -1,12 +1,16 @@
-package com.rugovit.qhash.workflow.charts;
+package com.rugovit.qhash.workflow.chart;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.mikephil.charting.data.CandleEntry;
 import com.rugovit.qhash.base_classes.data.Resource;
 import com.rugovit.qhash.base_classes.view_model.BaseViewModel;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +29,7 @@ public class ChartViewModel extends BaseViewModel{
 
     public static final String TAG = "ChartViewModel";
     //////////////////////////////////////////////////////
-    public final ObservableArrayList<Candle> candles = new ObservableArrayList<>();
+    public final MutableLiveData<List<CandleEntry>> entries = new MutableLiveData<>();
     public Date from = null;
     public Date to = null;
     public CandleTime candleTime = null;
@@ -35,6 +39,11 @@ public class ChartViewModel extends BaseViewModel{
 
     public ChartViewModel(@NonNull ChartRepository chartRepository) {
         this.chartRepository = chartRepository;
+         Date from =new Date();
+         from.setTime(System.currentTimeMillis());
+         Date to=new Date();
+         to.setTime(from.getTime()+24*60*60*100);
+         setObservers(from,to);
     }
 
     public void getNext() {
@@ -77,12 +86,25 @@ public class ChartViewModel extends BaseViewModel{
     }
     private void setCandles(@NonNull Resource<List<Candle>> candlesResource) {
         //TODO pogledati kao napraviti da se updeta realtime graf,   dali uopce  ima mogućnost prikaza dodatnih candela na gotov graf bez da se updeta cijeli, ako ne  onda cu samo realtime updetati cijeli graf
-        candles.clear();
-        candles.addAll(candlesResource.getData());
+        ArrayList<CandleEntry> temList=new  ArrayList<>();
+        for (Candle candle : candlesResource.getData()) {
+            CandleEntry entry=convertToCandleEntry(candle);
+            temList.add(entry);
+        }
+        entries.setValue(temList);
     }
 
     protected <T> void onError(@NonNull Resource<T> resorces) {
         super.onError(resorces);
         Log.e(TAG, resorces.getMessage());
+    }
+    private CandleEntry convertToCandleEntry(Candle candle){
+        //TODO pogledati kako prikazati  vemensku liniju u oisnosti o  što prikazuje  minute, sekunde sate itd
+        CandleEntry entry=new CandleEntry(candle.getDate().getTime()/1000,
+        candle.getHighPrice().floatValue(),
+        candle.getLowPrice().floatValue(),
+        candle.getOpenPrice().floatValue(),
+        candle.getClosePrice().floatValue());
+        return entry;
     }
 }

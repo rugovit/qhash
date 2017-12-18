@@ -1,4 +1,4 @@
-package com.rugovit.qhash.workflow.charts;
+package com.rugovit.qhash.workflow.chart;
 
 import android.support.annotation.NonNull;
 
@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class Candle {
     @NonNull
-    public Date time;
+    public Date date;
     @NonNull
     public BigDecimal highPrice;
     @NonNull
@@ -28,14 +28,12 @@ public class Candle {
     public BigDecimal avragePrice;
 /////////////////////////////////////////////////////////////////////////
     @NonNull
-    public Date getTime() {
-        return time;
+    public Date getDate() {
+        return date;
     }
-
-    public void setTime(@NonNull Date time) {
-        this.time = time;
+    public void setDate(@NonNull Date time) {
+        this.date = time;
     }
-
     @NonNull
     public BigDecimal getHighPrice() {
         return highPrice;

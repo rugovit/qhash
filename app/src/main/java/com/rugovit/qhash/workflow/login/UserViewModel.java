@@ -16,7 +16,7 @@ import static com.rugovit.qhash.base_classes.data.ResourceStatus.ERROR;
 import static com.rugovit.qhash.base_classes.data.ResourceStatus.SUCESS;
 
 /**
- * Created by rugođvit on 11/28/2017.
+ * Created by rugovit on 11/28/2017.
  */
 
 public class UserViewModel extends BaseViewModel {

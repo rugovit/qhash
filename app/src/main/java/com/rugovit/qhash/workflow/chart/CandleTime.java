@@ -1,4 +1,4 @@
-package com.rugovit.qhash.workflow.charts;
+package com.rugovit.qhash.workflow.chart;
 
 /**
  * Created by rugovit on 12/17/2017.

@@ -4,11 +4,11 @@
     <data>
         <variable
             name="chart"
-            type="com.rugovit.qhash.workflow.charts.ChartViewModel" />
+            type="com.rugovit.qhash.workflow.chart.ChartViewModel" />
     </data>
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-       
-    </android.support.constraint.ConstraintLayout>
+        <com.github.mikephil.charting.charts.CandleStickChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 </layout>
