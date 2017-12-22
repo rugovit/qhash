@@ -1,8 +1,7 @@
 package com.rugovit.qhash.workflow.chart;
 
+import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -32,12 +31,13 @@ public class ChartViewModel extends BaseViewModel{
     public final MutableLiveData<List<CandleEntry>> entries = new MutableLiveData<>();
     public Date from = null;
     public Date to = null;
-    public CandleTime candleTime = null;
+    public TimeStep timeStep = null;
     //////////////////////////////////////////////////////
     private Observable<Resource<List<Candle>>> observable;
     private ChartRepository chartRepository;
 
-    public ChartViewModel(@NonNull ChartRepository chartRepository) {
+    public ChartViewModel(@NonNull ChartRepository chartRepository,@NonNull Application application) {
+        super(application);
         this.chartRepository = chartRepository;
          Date from =new Date();
          from.setTime(System.currentTimeMillis());
@@ -59,17 +59,17 @@ public class ChartViewModel extends BaseViewModel{
     }
 
     public void setObservers(@NonNull Date from, @NonNull Date to) {
-        if (candleTime == null) {
-            candleTime = CandleTime.REAL_TIME;
+        if (timeStep == null) {
+            timeStep = TimeStep.REAL_TIME;
         }
-        setObservers(candleTime, from, to);
+        setObservers(timeStep, from, to);
     }
 
-    public void setObservers(@NonNull CandleTime candleTime, @NonNull Date from, @NonNull Date to) {
+    public void setObservers(@NonNull TimeStep timeStep, @NonNull Date from, @NonNull Date to) {
         this.from = from;
         this.to = to;
-        this.candleTime = candleTime;
-        observable = chartRepository.getCandelListObserver(candleTime, from, to);
+        this.timeStep = timeStep;
+        observable = chartRepository.getCandelListObserver(timeStep, from, to);
         observable.observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread());
         setObservable();

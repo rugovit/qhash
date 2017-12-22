@@ -36,7 +36,7 @@ public class ChartRepository extends BaseRepository {
         return INSTANCE;
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public Observable<Resource<List<Candle>>> getCandelListObserver(@NonNull CandleTime candleTime,@NonNull Date from,@NonNull Date to){
+    public Observable<Resource<List<Candle>>> getCandelListObserver(@NonNull TimeStep timeStep, @NonNull Date from, @NonNull Date to){
 
         Observable<Resource<List<Candle>>>  candlesObservable = Observable.create(emitter -> {
             emitter.onNext(getMockData());

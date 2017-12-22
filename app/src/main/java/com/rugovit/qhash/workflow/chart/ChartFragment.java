@@ -31,7 +31,7 @@ public class ChartFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
        ChartFragmentLayoutBinding binding =ChartFragmentLayoutBinding.inflate(
                 inflater, container, false);
-        binding.setChart(new ChartViewModel(ChartRepository.getInstance()));
+        binding.setChart(new ChartViewModel(ChartRepository.getInstance(),this.getActivity().getApplication()));
         View layout=binding.getRoot();
         CandleStickChart candleStickChart= layout.findViewById(R.id.chart);
         XAxis xAxis = candleStickChart.getXAxis();
