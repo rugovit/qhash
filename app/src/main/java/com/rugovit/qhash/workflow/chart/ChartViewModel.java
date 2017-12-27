@@ -24,11 +24,11 @@ import static com.rugovit.qhash.base_classes.data.ResourceStatus.SUCESS;
  * Created by rugovit on 12/13/2017.
  */
 
-public class ChartViewModel extends BaseViewModel{
+public class ChartViewModel extends BaseViewModel {
 
     public static final String TAG = "ChartViewModel";
     //////////////////////////////////////////////////////
-    public final MutableLiveData<List<CandleEntry>> entries = new MutableLiveData<>();
+    public final MutableLiveData<List<Candle>> candleList = new MutableLiveData<>();
     public Date from = null;
     public Date to = null;
     public TimeStep timeStep = null;
@@ -36,25 +36,25 @@ public class ChartViewModel extends BaseViewModel{
     private Observable<Resource<List<Candle>>> observable;
     private ChartRepository chartRepository;
 
-    public ChartViewModel(@NonNull ChartRepository chartRepository,@NonNull Application application) {
+    public ChartViewModel(@NonNull ChartRepository chartRepository, @NonNull Application application) {
         super(application);
         this.chartRepository = chartRepository;
-         Date from =new Date();
-         from.setTime(System.currentTimeMillis());
-         Date to=new Date();
-         to.setTime(from.getTime()+24*60*60*100);
-         setObservers(from,to);
+        Date from = new Date();
+        from.setTime(System.currentTimeMillis());
+        Date to = new Date();
+        to.setTime(from.getTime() + 24 * 60 * 60 * 100);
+        setObservers(from, to);
     }
 
     public void getNext() {
-        Date from=new Date(this.to.getTime());
-        Date to=new Date(this.to.getTime()+(this.to.getTime()-this.from.getTime()));
-        setObservers( from, to);
+        Date from = new Date(this.to.getTime());
+        Date to = new Date(this.to.getTime() + (this.to.getTime() - this.from.getTime()));
+        setObservers(from, to);
     }
 
     public void getPriv() {
-        Date from=new Date(this.from.getTime()-(this.to.getTime()-this.from.getTime()));
-        Date to=new Date(this.from.getTime());
+        Date from = new Date(this.from.getTime() - (this.to.getTime() - this.from.getTime()));
+        Date to = new Date(this.from.getTime());
         setObservers(from, to);
     }
 
@@ -78,33 +78,16 @@ public class ChartViewModel extends BaseViewModel{
     private void setObservable() {
         observable.subscribe(candlesResource -> {
             if (candlesResource.getStatus() == SUCESS) {
-                setCandles(candlesResource);
+                candleList.setValue(candlesResource.getData());
             } else if (candlesResource.getStatus() == ERROR) {
                 onError(candlesResource);
             }
         });
-    }
-    private void setCandles(@NonNull Resource<List<Candle>> candlesResource) {
-        //TODO pogledati kao napraviti da se updeta realtime graf,   dali uopce  ima mogućnost prikaza dodatnih candela na gotov graf bez da se updeta cijeli, ako ne  onda cu samo realtime updetati cijeli graf
-        ArrayList<CandleEntry> temList=new  ArrayList<>();
-        for (Candle candle : candlesResource.getData()) {
-            CandleEntry entry=convertToCandleEntry(candle);
-            temList.add(entry);
-        }
-        entries.setValue(temList);
     }
 
     protected <T> void onError(@NonNull Resource<T> resorces) {
         super.onError(resorces);
         Log.e(TAG, resorces.getMessage());
     }
-    private CandleEntry convertToCandleEntry(Candle candle){
-        //TODO pogledati kako prikazati  vemensku liniju u oisnosti o  što prikazuje  minute, sekunde sate itd
-        CandleEntry entry=new CandleEntry(candle.getDate().getTime()/1000,
-        candle.getHighPrice().floatValue(),
-        candle.getLowPrice().floatValue(),
-        candle.getOpenPrice().floatValue(),
-        candle.getClosePrice().floatValue());
-        return entry;
-    }
+
 }

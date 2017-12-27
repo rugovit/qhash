@@ -12,13 +12,13 @@ import com.rugovit.qhash.base_classes.data.Resource;
  */
 
 public class BaseViewModel extends AndroidViewModel {
-    Application application;
+            Application application;
     public BaseViewModel(@NonNull Application application) {
-        super(application);
-        this.application=application;
-    }
+                super(application);
+                this.application=application;
+            }
 
-    protected  <T> void  onError(@NonNull Resource<T> resorces) {
+        protected  <T> void  onError(@NonNull Resource<T> resorces) {
 
     }
 
