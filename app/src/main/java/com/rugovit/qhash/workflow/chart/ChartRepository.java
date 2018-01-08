@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.rugovit.qhash.base_classes.data.Resource;
 import com.rugovit.qhash.base_classes.model.BaseRepository;
+import com.rugovit.qhash.utils.TimeUtilsHelper;
 import com.rugovit.qhash.workflow.login.UserRepository;
 
 import java.math.BigDecimal;
@@ -52,13 +53,13 @@ public class ChartRepository extends BaseRepository {
         int randomBase=20;
         currentDate.setTime(System.currentTimeMillis());
         Random randomGenerator = new Random();
-         for(int i=0;i<50;i++){
+         for(long i=0;i<100050;i++){
              Candle candle=new Candle();
              Date tempDate=new Date();
-             tempDate.setTime(currentDate.getTime()+1000*60*i);
+             tempDate.setTime(currentDate.getTime()+ TimeUtilsHelper.DAY_MILISECUNDS*i);
              candle.setDate(tempDate);
-             candle.setOpenPrice(new BigDecimal(showRandomInteger(basePrice-randomBase,basePrice+randomBase,randomGenerator)));
-             candle.setClosePrice(new BigDecimal(showRandomInteger(basePrice-randomBase,basePrice+randomBase,randomGenerator)));
+             candle.setOpenPrice(new BigDecimal(getRandomInteger(basePrice-randomBase,basePrice+randomBase,randomGenerator)));
+             candle.setClosePrice(new BigDecimal(getRandomInteger(basePrice-randomBase,basePrice+randomBase,randomGenerator)));
 
              if(candle.getOpenPrice().intValue()>candle.getClosePrice().intValue()){
                  candle.setHighPrice(new BigDecimal(candle.getOpenPrice().intValue()+randomGenerator.nextInt(randomBase)));
@@ -70,6 +71,7 @@ public class ChartRepository extends BaseRepository {
              }
              candle.setVolumeFrom(new BigDecimal(0));
              candle.setVolumeTo(new BigDecimal(0));
+             candle.setVolume(new BigDecimal(getRandomInteger(basePrice-randomBase,basePrice+randomBase,randomGenerator)));
              candle.setAvragePrice(new BigDecimal(0));
              list.add(candle);
 
@@ -77,7 +79,7 @@ public class ChartRepository extends BaseRepository {
         return  Resource.success(list);
     }
 
-    private  int showRandomInteger(int aStart, int aEnd, Random aRandom){
+    private  int getRandomInteger(int aStart, int aEnd, Random aRandom){
         if (aStart > aEnd) {
             throw new IllegalArgumentException("Start cannot exceed End.");
         }

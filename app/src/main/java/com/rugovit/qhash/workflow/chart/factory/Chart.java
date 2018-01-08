@@ -1,8 +1,10 @@
 package com.rugovit.qhash.workflow.chart.factory;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.rugovit.qhash.workflow.chart.Candle;
+import com.rugovit.qhash.workflow.chart.TimeStep;
 
 import java.util.List;
 
@@ -11,7 +13,9 @@ import java.util.List;
  */
 
 public interface Chart {
-    public void  setCandles(List<Candle> candleList);
-    public List<Candle> getCandles();
-    public View getChartView();
+     void  setCandles(List<Candle> candleList,@NonNull TimeStep timeStep);
+     List<Candle> getCandles();
+     View getChartView();
+     TimeStep getTimeStep();
+     void setTimeStep(@NonNull TimeStep timeStep);
 }

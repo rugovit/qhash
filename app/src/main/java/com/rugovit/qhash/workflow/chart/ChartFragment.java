@@ -31,8 +31,8 @@ public class ChartFragment extends BaseFragment {
        ChartFragmentLayoutBinding binding =ChartFragmentLayoutBinding.inflate(
                 inflater, container, false);
 
-        binding.setChartViewModel(new ChartViewModel(ChartRepository.getInstance(),this.getActivity().getApplication()));
-        binding.getChartViewModel().candleList.observe(this, candles -> binding.chartHolder.addView(ChartFactory.getChart(getActivity(),candles, ChartType.CANDLE_STICK_CHART).getChartView())
+        binding.setChartViewModel(new ChartViewModel(ChartRepository.getInstance(),this.getActivity().getApplication(),TimeStep.DAY));
+        binding.getChartViewModel().candleList.observe(this, candles -> binding.chartHolder.addView(ChartFactory.getChart(getActivity(),candles, ChartType.CANDLE_STICK_CHART,binding.getChartViewModel().timeStep).getChartView())
         );
 
         return  binding.getRoot();

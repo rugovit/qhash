@@ -23,6 +23,8 @@ public class Candle {
     @NonNull
     public BigDecimal volumeTo;
     @NonNull
+    public BigDecimal volume;
+    @NonNull
     public BigDecimal closePrice;
     @NonNull
     public BigDecimal avragePrice;
@@ -71,6 +73,14 @@ public class Candle {
     }
 
     @NonNull
+    public BigDecimal getVolume() {
+        return volume;
+    }
+
+    public void setVolume(@NonNull BigDecimal volume) {
+        this.volume = volume;
+    }
+    @NonNull
     public BigDecimal getVolumeTo() {
         return volumeTo;
     }
@@ -78,7 +88,6 @@ public class Candle {
     public void setVolumeTo(@NonNull BigDecimal volumeTo) {
         this.volumeTo = volumeTo;
     }
-
     @NonNull
     public BigDecimal getClosePrice() {
         return closePrice;
