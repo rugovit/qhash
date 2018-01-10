@@ -53,7 +53,7 @@ public class ChartRepository extends BaseRepository {
         int randomBase=20;
         currentDate.setTime(System.currentTimeMillis());
         Random randomGenerator = new Random();
-         for(long i=0;i<100050;i++){
+         for(long i=0;i<1050;i++){
              Candle candle=new Candle();
              Date tempDate=new Date();
              tempDate.setTime(currentDate.getTime()+ TimeUtilsHelper.DAY_MILISECUNDS*i);

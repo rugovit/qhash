@@ -3,12 +3,14 @@ package com.rugovit.qhash.workflow.chart.factory.IkvStockChart;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.SpannableString;
 import android.text.format.DateUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.androidplot.xy.CandlestickSeries;
 import com.rugovit.qhash.R;
+import com.rugovit.qhash.utils.DisplayUtils;
 import com.rugovit.qhash.workflow.chart.Candle;
 import com.rugovit.qhash.workflow.chart.TimeStep;
 import com.rugovit.qhash.workflow.chart.factory.Chart;
@@ -16,8 +18,20 @@ import com.rugovit.qhash.workflow.chart.factory.ChartType;
 import com.wordplat.ikvstockchart.InteractiveKLineLayout;
 import com.wordplat.ikvstockchart.InteractiveKLineView;
 import com.wordplat.ikvstockchart.KLineHandler;
+import com.wordplat.ikvstockchart.drawing.HighlightDrawing;
+import com.wordplat.ikvstockchart.drawing.KDJDrawing;
+import com.wordplat.ikvstockchart.drawing.MACDDrawing;
+import com.wordplat.ikvstockchart.drawing.RSIDrawing;
+import com.wordplat.ikvstockchart.drawing.StockIndexYLabelDrawing;
 import com.wordplat.ikvstockchart.entry.Entry;
 import com.wordplat.ikvstockchart.entry.EntrySet;
+import com.wordplat.ikvstockchart.entry.SizeColor;
+import com.wordplat.ikvstockchart.entry.StockKDJIndex;
+import com.wordplat.ikvstockchart.entry.StockMACDIndex;
+import com.wordplat.ikvstockchart.entry.StockRSIIndex;
+import com.wordplat.ikvstockchart.marker.XAxisTextMarkerView;
+import com.wordplat.ikvstockchart.marker.YAxisTextMarkerView;
+import com.wordplat.ikvstockchart.render.KLineRender;
 
 import java.util.Date;
 import java.util.List;
@@ -33,20 +47,62 @@ public class IkvStockChart implements Chart {
     private List<Candle> candleList;
     private TimeStep timeStep;
     private Context context;
+    private KLineRender kLineRender;
     public IkvStockChart(@NonNull Context context, @NonNull ChartType chartType, @NonNull TimeStep timeStep) {
         this.chartType=chartType;
         this.timeStep=timeStep;
         this.context=context;
         chartView= (InteractiveKLineView) ((Activity)context).getLayoutInflater().inflate(R.layout.ikv_chart,null);
+        chartView.setEnableLeftRefresh(false);
+        chartView.setEnableLeftRefresh(false);
+        kLineRender = (KLineRender) chartView.getRender();
+        final int paddingTop = DisplayUtils.dpTopx(context, 10);
+        final int stockMarkerViewHeight = DisplayUtils.dpTopx(context, 15);
 
+        // MACD
+        HighlightDrawing macdHighlightDrawing = new HighlightDrawing();
+        macdHighlightDrawing.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
+
+        StockMACDIndex macdIndex = new StockMACDIndex();
+        macdIndex.addDrawing(new MACDDrawing());
+        macdIndex.addDrawing(new StockIndexYLabelDrawing());
+        macdIndex.addDrawing(macdHighlightDrawing);
+        macdIndex.setPaddingTop(paddingTop);
+        kLineRender.addStockIndex(macdIndex);
+
+        // RSI
+        HighlightDrawing rsiHighlightDrawing = new HighlightDrawing();
+        rsiHighlightDrawing.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
+
+        StockRSIIndex rsiIndex = new StockRSIIndex();
+        rsiIndex.addDrawing(new RSIDrawing());
+        rsiIndex.addDrawing(new StockIndexYLabelDrawing());
+        rsiIndex.addDrawing(rsiHighlightDrawing);
+        rsiIndex.setPaddingTop(paddingTop);
+        kLineRender.addStockIndex(rsiIndex);
+
+        // KDJ
+        HighlightDrawing kdjHighlightDrawing = new HighlightDrawing();
+        kdjHighlightDrawing.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
+
+        StockKDJIndex kdjIndex = new StockKDJIndex();
+        kdjIndex.addDrawing(new KDJDrawing());
+        kdjIndex.addDrawing(new StockIndexYLabelDrawing());
+        kdjIndex.addDrawing(kdjHighlightDrawing);
+        kdjIndex.setPaddingTop(paddingTop);
+        kLineRender.addStockIndex(kdjIndex);
+
+        kLineRender.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
+        kLineRender.addMarkerView(new XAxisTextMarkerView(stockMarkerViewHeight));
     }
 
 
     /////////////////////////////////////CHART INTERFACE///////////////////////////////////////////
     @Override
     public void setCandles(List<Candle> candleList, @NonNull TimeStep timeStep) {
-
-        chartView.setEntrySet(convertCandlesToCandlestickSeries( candleList));
+        EntrySet entrySet=convertCandlesToCandlestickSeries( candleList);
+        entrySet.computeStockIndex();
+        chartView.setEntrySet(entrySet);
         chartView.notifyDataSetChanged();
         chartView.setKLineHandler(new KLineHandler() {
             @Override
