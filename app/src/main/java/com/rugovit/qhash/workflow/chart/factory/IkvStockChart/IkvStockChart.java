@@ -7,6 +7,7 @@ import android.text.SpannableString;
 import android.text.format.DateUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.androidplot.xy.CandlestickSeries;
 import com.rugovit.qhash.R;
@@ -26,6 +27,7 @@ import com.wordplat.ikvstockchart.drawing.StockIndexYLabelDrawing;
 import com.wordplat.ikvstockchart.entry.Entry;
 import com.wordplat.ikvstockchart.entry.EntrySet;
 import com.wordplat.ikvstockchart.entry.SizeColor;
+import com.wordplat.ikvstockchart.entry.StockDataTest;
 import com.wordplat.ikvstockchart.entry.StockKDJIndex;
 import com.wordplat.ikvstockchart.entry.StockMACDIndex;
 import com.wordplat.ikvstockchart.entry.StockRSIIndex;
@@ -33,6 +35,7 @@ import com.wordplat.ikvstockchart.marker.XAxisTextMarkerView;
 import com.wordplat.ikvstockchart.marker.YAxisTextMarkerView;
 import com.wordplat.ikvstockchart.render.KLineRender;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +46,8 @@ import java.util.List;
 public class IkvStockChart implements Chart {
 
     private ChartType chartType;
-    private InteractiveKLineView chartView;
+    private LinearLayout chartView;
+    private InteractiveKLineView interactiveKLineView;
     private List<Candle> candleList;
     private TimeStep timeStep;
     private Context context;
@@ -52,10 +56,11 @@ public class IkvStockChart implements Chart {
         this.chartType=chartType;
         this.timeStep=timeStep;
         this.context=context;
-        chartView= (InteractiveKLineView) ((Activity)context).getLayoutInflater().inflate(R.layout.ikv_chart,null);
-        chartView.setEnableLeftRefresh(false);
-        chartView.setEnableLeftRefresh(false);
-        kLineRender = (KLineRender) chartView.getRender();
+        chartView= (LinearLayout) ((Activity)context).getLayoutInflater().inflate(R.layout.ikv_chart,null);
+        interactiveKLineView=chartView.findViewById(R.id.kLineLayout);
+        interactiveKLineView.setEnableLeftRefresh(false);
+        interactiveKLineView.setEnableLeftRefresh(false);
+        kLineRender = (KLineRender) interactiveKLineView.getRender();
         final int paddingTop = DisplayUtils.dpTopx(context, 10);
         final int stockMarkerViewHeight = DisplayUtils.dpTopx(context, 15);
 
@@ -100,41 +105,24 @@ public class IkvStockChart implements Chart {
     /////////////////////////////////////CHART INTERFACE///////////////////////////////////////////
     @Override
     public void setCandles(List<Candle> candleList, @NonNull TimeStep timeStep) {
+/*
+        String kLineData = "";
+        try {
+            InputStream in = context.getResources().openRawResource(R.raw.kline1);
+            int length = in.available();
+            byte[] buffer = new byte[length];
+            in.read(buffer);
+            kLineData = new String(buffer, "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        EntrySet entrySet = StockDataTest.parseKLineData(kLineData);*/
         EntrySet entrySet=convertCandlesToCandlestickSeries( candleList);
         entrySet.computeStockIndex();
-        chartView.setEntrySet(entrySet);
-        chartView.notifyDataSetChanged();
-        chartView.setKLineHandler(new KLineHandler() {
-            @Override
-            public void onLeftRefresh() {
-                chartView.refreshComplete();
-            }
+        interactiveKLineView.setEntrySet(entrySet);
 
-            @Override
-            public void onRightRefresh() {
-                chartView.refreshComplete();
-            }
 
-            @Override
-            public void onSingleTap(MotionEvent e, float x, float y) {
-
-            }
-
-            @Override
-            public void onDoubleTap(MotionEvent e, float x, float y) {
-
-            }
-
-            @Override
-            public void onHighlight(Entry entry, int entryIndex, float x, float y) {
-
-            }
-
-            @Override
-            public void onCancelHighlight() {
-
-            }
-        });
     }
 
     @Override

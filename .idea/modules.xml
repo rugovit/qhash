@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ikvStockChart/ikvStockChart/ikvStockChart.iml" filepath="$PROJECT_DIR$/../ikvStockChart/ikvStockChart/ikvStockChart.iml" />
+      <module fileurl="file://E:\RAD\qhash\ikvStockChart\ikvStockChart\ikvStockChart-ikvStockChart.iml" filepath="E:\RAD\qhash\ikvStockChart\ikvStockChart\ikvStockChart-ikvStockChart.iml" />
       <module fileurl="file://$PROJECT_DIR$/qhash.iml" filepath="$PROJECT_DIR$/qhash.iml" />
     </modules>
   </component>
