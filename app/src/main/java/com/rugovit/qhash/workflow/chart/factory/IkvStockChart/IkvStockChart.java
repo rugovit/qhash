@@ -3,39 +3,25 @@ package com.rugovit.qhash.workflow.chart.factory.IkvStockChart;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.SpannableString;
 import android.text.format.DateUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.androidplot.xy.CandlestickSeries;
 import com.rugovit.qhash.R;
 import com.rugovit.qhash.utils.DisplayUtils;
 import com.rugovit.qhash.workflow.chart.Candle;
 import com.rugovit.qhash.workflow.chart.TimeStep;
 import com.rugovit.qhash.workflow.chart.factory.Chart;
 import com.rugovit.qhash.workflow.chart.factory.ChartType;
-import com.wordplat.ikvstockchart.InteractiveKLineLayout;
 import com.wordplat.ikvstockchart.InteractiveKLineView;
-import com.wordplat.ikvstockchart.KLineHandler;
-import com.wordplat.ikvstockchart.drawing.HighlightDrawing;
-import com.wordplat.ikvstockchart.drawing.KDJDrawing;
-import com.wordplat.ikvstockchart.drawing.MACDDrawing;
-import com.wordplat.ikvstockchart.drawing.RSIDrawing;
-import com.wordplat.ikvstockchart.drawing.StockIndexYLabelDrawing;
 import com.wordplat.ikvstockchart.entry.Entry;
 import com.wordplat.ikvstockchart.entry.EntrySet;
-import com.wordplat.ikvstockchart.entry.SizeColor;
-import com.wordplat.ikvstockchart.entry.StockDataTest;
-import com.wordplat.ikvstockchart.entry.StockKDJIndex;
-import com.wordplat.ikvstockchart.entry.StockMACDIndex;
-import com.wordplat.ikvstockchart.entry.StockRSIIndex;
+import com.wordplat.ikvstockchart.entry.StockBOLLIndex;
 import com.wordplat.ikvstockchart.marker.XAxisTextMarkerView;
 import com.wordplat.ikvstockchart.marker.YAxisTextMarkerView;
+import com.wordplat.ikvstockchart.render.IndependedRender;
 import com.wordplat.ikvstockchart.render.KLineRender;
 
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +35,7 @@ public class IkvStockChart implements Chart {
     private LinearLayout chartView;
     private InteractiveKLineView interactiveKLineView;
     private List<Candle> candleList;
+    private StockBOLLIndex bollIndex;
     private TimeStep timeStep;
     private Context context;
     private KLineRender kLineRender;
@@ -60,12 +47,22 @@ public class IkvStockChart implements Chart {
         interactiveKLineView=chartView.findViewById(R.id.kLineLayout);
         interactiveKLineView.setEnableLeftRefresh(false);
         interactiveKLineView.setEnableLeftRefresh(false);
+
+
+
         kLineRender = (KLineRender) interactiveKLineView.getRender();
+
+
         final int paddingTop = DisplayUtils.dpTopx(context, 10);
         final int stockMarkerViewHeight = DisplayUtils.dpTopx(context, 15);
 
+        // 成交量
+        /*StockKLineVolumeIndex kLineVolumeIndex = new StockKLineVolumeIndex(DisplayUtils.dpTopx(context, 100));
+         kLineVolumeIndex.addDrawing(new KLineVolumeDrawing());
+         kLineVolumeIndex.addDrawing(new KLineVolumeHighlightDrawing());
+        kLineRender.addStockIndex(kLineVolumeIndex);*/
         // MACD
-        HighlightDrawing macdHighlightDrawing = new HighlightDrawing();
+      /*  HighlightDrawing macdHighlightDrawing = new HighlightDrawing();
         macdHighlightDrawing.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
 
         StockMACDIndex macdIndex = new StockMACDIndex();
@@ -73,9 +70,18 @@ public class IkvStockChart implements Chart {
         macdIndex.addDrawing(new StockIndexYLabelDrawing());
         macdIndex.addDrawing(macdHighlightDrawing);
         macdIndex.setPaddingTop(paddingTop);
-        kLineRender.addStockIndex(macdIndex);
+        kLineRender.addStockIndex(macdIndex);*/
+        // BOLL
+        /*HighlightDrawing bollHighlightDrawing = new HighlightDrawing();
+        bollHighlightDrawing.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
 
-        // RSI
+        bollIndex = new StockBOLLIndex(DisplayUtils.dpTopx(context, 100));
+        bollIndex.addDrawing(new BOLLDrawing());
+        bollIndex.addDrawing(new StockIndexYLabelDrawing());
+        bollIndex.addDrawing(bollHighlightDrawing);
+        bollIndex.setPaddingTop(DisplayUtils.dpTopx(context, 20));
+        kLineRender.addStockIndex(bollIndex);*/
+     /*   // RSI
         HighlightDrawing rsiHighlightDrawing = new HighlightDrawing();
         rsiHighlightDrawing.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
 
@@ -95,7 +101,7 @@ public class IkvStockChart implements Chart {
         kdjIndex.addDrawing(new StockIndexYLabelDrawing());
         kdjIndex.addDrawing(kdjHighlightDrawing);
         kdjIndex.setPaddingTop(paddingTop);
-        kLineRender.addStockIndex(kdjIndex);
+        kLineRender.addStockIndex(kdjIndex);*/
 
         kLineRender.addMarkerView(new YAxisTextMarkerView(stockMarkerViewHeight));
         kLineRender.addMarkerView(new XAxisTextMarkerView(stockMarkerViewHeight));
@@ -121,6 +127,7 @@ public class IkvStockChart implements Chart {
         EntrySet entrySet=convertCandlesToCandlestickSeries( candleList);
         entrySet.computeStockIndex();
         interactiveKLineView.setEntrySet(entrySet);
+        interactiveKLineView.addIndependedRender(new IndependedRender(context,entrySet));
 
 
     }
