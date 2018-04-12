@@ -1,2 +1,3 @@
 [submodule "ikvStockChart"]
+    path = ikvStockChart
 	url = https://github.com/rugovit/ikvStockChart.git
